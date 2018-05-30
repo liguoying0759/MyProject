@@ -1,0 +1,68 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_id2">
+            <field name="name">tl_project_tree</field>
+            <field name="model">tl_project.project</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="client_name"/>
+                    <field name="project_code"/>
+                    <field name="location"/>
+                    <field name="construction_organization"/>
+                    <field name="supervision_unit"/>
+                    <field name="department_of_QA"/>
+                    <field name="description"/>
+                    <field name="executing_state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="course_form_view2">
+            <field name="name">tl_project_form</field>
+            <field name="model">tl_project.project</field>
+            <field name="arch" type="xml">
+                <form string="project Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="project_code"/>
+                                <field name="client_code"/>
+                                <field name="client_name"/>
+                                <field name="location"/>
+                                <field name="construction_organization"/>
+                            </group>
+                            <group>
+                                <field name="supervision_unit"/>
+                                <field name="department_of_QA"/>
+                                <field name="design_organization"/>
+                                <field name="business_unit"/>
+                                <field name="executing_state"/>
+                                <field name="description"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="TL_project_project_action">
+            <field name="name">工程信息</field>
+            <field name="res_model">tl_project.project</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">创建工程信息
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="tl_project_menu" name="工程信息"/>
+        <menuitem id="tl_project_menu_second" name="工程信息"
+                  parent="tl_project_menu"/>
+        <menuitem id="tl_project_three" name="工程信息" parent="tl_project_menu_second"
+                  action="TL_project_project_action"/>
+    </data>
+</odoo>
