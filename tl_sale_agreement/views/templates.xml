@@ -1,0 +1,260 @@
+<odoo>
+    <data>
+
+        <record model="ir.actions.act_window" id="action_sales_agreement_to_so">
+            <field name="name">Request for Quotation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="domain">[('sales_agreement','=',active_id)]</field>
+            <field name="context">{"default_sales_agreement":active_id}</field>
+        </record>
+
+        <record model="ir.ui.view" id="course_form_view">
+            <field name="name">tl_optimize_tree</field>
+            <field name="model">tl_sale_agreement.sale_agreement</field>
+            <field name="arch" type="xml">
+                <tree string="tl_optimize list">
+                    <field name="name"/>
+                    <field name="client_name"/>
+                    <field name="project_address"/>
+                    <field name="start_time"/>
+                    <field name="end_time"/>
+                    <field name="enable"/>
+                    <field name="sale_agreement_lines"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="course_form_view11">
+            <field name="name">tl_optimize_form</field>
+            <field name="model">tl_sale_agreement.sale_agreement</field>
+            <field name="arch" type="xml">
+                <form string="Course Form">
+                    <header>
+                        <button name="%(action_sales_agreement_to_so)d" type="action"
+                                string="创建任务单"
+                                class="btn-primary"
+                                states="done"/>
+                        <button name="action_draft" type="object"
+                                string="重置为草稿"
+                                states="confirmed,done"/>
+                        <button name="action_confirm" type="object"
+                                string="确认" states="draft"
+                                class="oe_highlight"/>
+                        <button name="action_done" type="object"
+                                string="标记为完成" states="confirmed"
+                                class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="pull-left">
+                            <label for="name" class="oe_edit_only oe_inline"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="client_name"/>
+                                <field name="contract_code" placeholder="例如：PO0025"/>
+                                <field name="project_address"/>
+                                <field name="start_time"/>
+                                <field name="end_time"/>
+                                <field name="agreement_type"/>
+                            </group>
+                            <group>
+                                <field name="estimated_amount"/>
+                                <!--<field name="pay_type"/>-->
+                                <field name="contact"/>
+                                <field name="salesman" string="销售员"/>
+                                <field name="enable"/>
+                                <field name="issale"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="商品砼">
+                                <field name="sale_agreement_lines">
+                                    <tree string="sale_agreement_lines" editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="number"/>
+                                        <field name="qty_ordered"/>
+                                        <field name="strength_grade"/>
+                                        <field name="product_uom" groups="product.group_uom"/>
+                                        <field name="schedule_date" groups="base.group_no_one"/>
+                                        <!--<field name="account_analytic_id" groups="purchase.group_analytic_accounting"/>-->
+                                        <field name="engineering_parts"/>
+                                        <field name="unloading_method"/>
+                                        <field name="impermeability_grade"/>
+                                        <field name="slump"/>
+                                        <field name="guaranteed_amount"/>
+                                        <field name="price_uint"/>
+                                    </tree>
+                                    <form string="Products">
+                                        <sheet>
+                                            <group>
+                                                <field name="product_id"/>
+                                                <field name="number"/>
+                                                <field name="qty_ordered"/>
+                                                <field name="product_uom"/>
+                                                <field name="strength_grade"/>
+                                                <field name="schedule_date"/>
+                                                <field name="engineering_parts"/>
+                                                <field name="impermeability_grade"/>
+                                                <field name="slump"/>
+                                                <field name="guaranteed_amount"/>
+                                                <field name="unloading_method"/>
+                                                <!--<field name="account_analytic_id"-->
+                                                <!--groups="purchase.group_analytic_accounting"/>-->
+                                                <field name="company_id" groups="base.group_multi_company"
+                                                       options="{'no_create': True}"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <separator string="条款和条件"/>
+                                <field name="description"/>
+                            </page>
+                            <!--<page string="配套方式">-->
+                            <!--<field name="sale_agreement_lines">-->
+                            <!--<tree>-->
+                            <!--<field name="product_id" string="车类型"/>-->
+                            <!--<field name="price_uint"/>-->
+                            <!--<field name="price_subtotal"/>-->
+                            <!--</tree>-->
+                            <!--<form>-->
+                            <!--<sheet>-->
+                            <!--<group>-->
+                            <!--<field name="product_id" string="车类型"/>-->
+                            <!--<field name="price_uint"/>-->
+                            <!--<field name="price_subtotal"/>-->
+                            <!--</group>-->
+                            <!--</sheet>-->
+                            <!--</form>-->
+                            <!--</field>-->
+                            <!--</page>-->
+                            <page string="其他信息">
+                                <sheet>
+                                    <group>
+                                        <field name="haul_distance"/>
+                                        <field name="auditor"/>
+                                        <field name="audit_time"/>
+                                        <field name="quotation_date"/>
+                                    </group>
+                                </sheet>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="sale_order_supply_form2">
+            <field name="name">sale_order_supply_form2</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="sales_agreement"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sale_order_line_form">
+            <field name="name">sale_order_line_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
+                    <field name="strength_grade"/>
+                    <field name="engineering_parts"/>
+                    <field name="unloading_method"/>
+                    <field name="impermeability_grade"/>
+                    <field name="slump"/>
+                    <field name="guaranteed_amount"/>
+                    <field name="delivery_time"/>
+                    <field name="supply_end_time"/>
+                    <field name="number_of_mixer_truck"/>
+                    <field name="delivery_date"/>
+                    <field name="receipt_number"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view"  id="confirm_receipt">
+            <field name="name">confirm_receipt</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="sales_agreement" position="after">
+                    <field name="agreement_type_code"/>
+                </field>
+                <xpath expr="//header" position="inside">
+                    <button name="confirm_receipt" type="object" class="oe_highlight" string="确认收款并确定任务单" attrs="{'invisible': ['|',('state1','=','confirm'),('agreement_type_code','=','formal')]}"/>
+                    <button name="confirm_task" type="object" class="oe_highlight" string="确定任务单" attrs="{'invisible': ['|',('state2','=','confirm'),('agreement_type_code','!=','formal')]}"/>
+                    <field name="state1" widget="statusbar" attrs="{'invisible': [('agreement_type_code','=','formal')]}"/>
+                    <field name="state2" widget="statusbar" attrs="{'invisible': [('agreement_type_code','!=','formal')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--&lt;!&ndash; 新建用户组hideme &ndash;&gt;-->
+        <!--<record id="hideme" model="res.groups">-->
+            <!--<field name="category_id" ref="base.module_category_hidden" />-->
+            <!--<field name="name">hide me</field>-->
+        <!--</record>-->
+        <!--&lt;!&ndash; 指定只有hidme用户组才能看到消息菜单 &ndash;&gt;-->
+        <!--<record id="sale.menu_sale_quotations" model="ir.ui.menu">-->
+            <!--<field name="groups_id" eval="[(6, 0, [ref('hideme')])]"/>-->
+        <!--</record>-->
+
+        <record id="view_purchase_contract_add1" model="ir.ui.view">
+            <field name="name">取消按钮</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <button name="action_quotation_send" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </button>
+                <xpath expr="//button[@name='action_confirm']" position="replace">
+                </xpath>
+                <!--<xpath expr="//button[@name='action_confirm']" position="attributes">-->
+                <!--<attribute name="invisible">True</attribute>-->
+                <!--</xpath>-->
+                <button name="action_confirm" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </button>
+                <button name="print_quotation" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </button>
+                <button name="action_cancel" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </button>
+                <button name="action_draft" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </button>
+                <button name="action_done" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </button>
+                <button name="action_unlock" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </button>
+                <field name="state" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+
+
+                <!--<xpath expr="//header" position="inside">-->
+                <!--<attribute name="attrs">{'invisible': 1}</attribute>-->
+                <!--</xpath>-->
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_list_ideas">
+            <field name="name">销售合同</field>
+            <field name="res_model">tl_sale_agreement.sale_agreement</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_ideas" parent="sale.sale_order_menu" name="销售合同" sequence="10"
+                  action="action_list_ideas"/>
+    </data>
+</odoo>
