@@ -1,0 +1,124 @@
+<odoo>
+    <data>
+
+        <record id="sale_view_order_form_margin" model="ir.ui.view">
+            <field name="name">sale_view_order_form_margin</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='margin']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="margin_percent" groups='sales_team.group_sale_manager'></field>
+                </xpath>
+
+            </field>
+        </record>
+        <!-- Inherit Form View to Modify it -->
+        <!--<record id="sale_view_order_form_client_po" model="ir.ui.view">-->
+        <!--<field name="name">sale_view_order_form_client_po</field>-->
+        <!--<field name="model">sale.order</field>-->
+        <!--<field name="inherit_id" ref="sale.view_order_form"/>-->
+        <!--<field name="arch" type="xml">-->
+
+        <!--<xpath expr="//field[@name='team_id']" position="after">-->
+        <!--&lt;!&ndash; Add your fields or attributes here &ndash;&gt;-->
+        <!--<field name="client_order_ref1" string="客户PO1"></field>-->
+        <!--</xpath>-->
+
+        <!--</field>-->
+        <!--</record>-->
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="approve_view_order_form" model="ir.ui.view">
+            <field name="name">approve_view_order_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+
+                <xpath expr="//button[@name='action_confirm']" position="replace">
+
+                </xpath>
+                <xpath expr="//button[@name='action_confirm']" position="replace">
+
+
+                    <!-- Add your fields or attributes here -->
+                    <button name="action_confirm" id="action_confirm"
+                            string="审批" class="btn-primary" type="object"
+                            attrs="{'invisible': [('state', 'not in', ['approve'])]}"
+                            groups='sales_team.group_sale_manager'/>
+
+                    <button name="confirm"
+                            string="确认订单" type="object"
+                            attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="hide_sale_order_form_tax" model="ir.ui.view">
+            <field name="name">hide_sale_order_form_tax</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="attributes">
+                    <!-- Add your fields or attributes here -->
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_tax']" position="attributes">
+                    <!-- Add your fields or attributes here -->
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="inherit_sale_view_sale_order_filter" model="ir.ui.view">
+            <field name="name">inherit_sale_view_sale_order_filter</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//filter[@name='activities_upcoming_all']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <filter name="approve" string="审核" domain="[('state', '=', 'approve')]"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="add_progress_page" model="ir.ui.view">
+            <field name="name">add_progress_page</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook" position="inside">
+                    <!-- Add your fields or attributes here -->
+                    <page string="订单进度">
+                        <group>
+                            <group>
+                                <field name="confirm_sample_time"></field>
+                                <field name="component_sample_time"></field>
+                                <field name="test_sample_time"></field>
+                                <field name="bulk_sample_time"></field>
+                            </group>
+                            <group>
+                                <field name="confirm_sample_time_status"></field>
+                                <field name="component_sample_time_status"></field>
+                                <field name="test_sample_time_status"></field>
+                                <field name="bulk_sample_time_status"></field>
+
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
